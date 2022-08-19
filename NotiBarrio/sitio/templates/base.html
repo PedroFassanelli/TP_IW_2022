@@ -1,0 +1,36 @@
+<!-- Todo lo que se mostrara en cada html -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block namepage %}{% endblock %}</title>
+    </head>
+    <body>
+        <!-- Inicio Header Menu area -->
+        <header>
+            <div>
+                <nav>
+                    <div>
+                        <a href="{% url 'homepage' %}">Noti-Barrio</a>
+                        <ul>
+                            <li><a href="{% url 'mibarrio' %}">Mi Barrio</a></li>
+                            <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+                            <li><a href="{% url 'register' %}">Registrarse</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        <!-- Fin Header Menu area -->
+
+        <!-- Contenido de cada html -->
+        {% block contents %}
+        {% endblock %}
+
+        <!-- Inicio Footer Menu area -->
+        <footer>
+            <h1>este es el footer de la base</h1>
+        </footer>
+        <!-- Fin Footer Menu area -->
+    </body>
+</html>

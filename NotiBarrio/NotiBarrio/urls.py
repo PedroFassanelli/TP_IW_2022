@@ -19,9 +19,9 @@ from sitio import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.homepage),
-    path('mibarrio/', views.mibarrio),
-    path('login/', views.login),
-    path('register/', views.register),
-    path('nuevapublicacion/', views.nuevaPublicacion),
+    path('', views.homepage, name='homepage'),
+    path('mibarrio/', views.mibarrio, name='mibarrio'),
+    path('login/', views.login, name='login'),
+    path('register/', views.register, name='register'),
+    path('nuevapublicacion/', views.nuevaPublicacion, name='nuevapublicacion'),
 ]
