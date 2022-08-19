@@ -1,0 +1,1 @@
+web: cd NotiBarrio && gunicorn NotiBarrio.wsgi --log-file -
