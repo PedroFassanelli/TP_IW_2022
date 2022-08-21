@@ -9,6 +9,6 @@
     <p><a href="{% url 'logout' %}">Cerrar Sesión</a></p>
 {% else %}
     <p>No estas logueado</p>
-    <a href="{% url 'login' %}">Iniciar Sesión</a>
+    <a href="{% url 'login' %}" class="btn btn-secondary">Iniciar Sesión</a>
 {% endif %}
 {% endblock %}
