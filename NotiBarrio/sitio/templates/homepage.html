@@ -3,12 +3,14 @@
 {% block namepage %}Homepage{% endblock %}
 
 {% block contents %}
-<h1>Homepage</h1>
-{% if user.is_authenticated %}
-    Bienvendio {{ user.username }}!!
-    <p><a href="{% url 'logout' %}">Cerrar Sesión</a></p>
-{% else %}
-    <p>No estas logueado</p>
-    <a href="{% url 'login' %}" class="btn btn-secondary">Iniciar Sesión</a>
-{% endif %}
+<div ALIGN="center">
+    <h1>Homepage</h1>
+    {% if user.is_authenticated %}
+        Bienvendio {{ user.username }}!!
+        <p><a href="{% url 'logout' %}">Cerrar Sesión</a></p>
+    {% else %}
+        <p>No estas logueado</p>
+        <a href="{% url 'login' %}" class="btn btn-secondary">Iniciar Sesión</a>
+    {% endif %}
+</div>
 {% endblock %}

@@ -22,7 +22,8 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('', views.homepage, name='homepage'),
     path('mibarrio/', views.mibarrio, name='mibarrio'),
-    #path('login/', views.login, name='login'),
+    path('notipublicas/', views.notipublicas, name='notipublicas'),
+    path('login/', views.login, name='login'),
     path('register/', views.register, name='register'),
     path('nuevapublicacion/', views.nuevaPublicacion, name='nuevapublicacion'),
 ]

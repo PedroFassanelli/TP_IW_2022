@@ -3,16 +3,16 @@ from sitio.models import *
 from django.core.exceptions import ValidationError
 
 class FromCrearUsuario(forms.Form):
-    firs_name = forms.CharField(max_length= 15)
-    last_name = forms.CharField(max_length= 25)
-    email = forms.EmailField(max_length= 50)
-    password = forms.CharField(widget=forms.PasswordInput())
-    password2 = forms.CharField(widget=forms.PasswordInput())
+    firs_name = forms.CharField(max_length= 15, label='Nombre')
+    last_name = forms.CharField(max_length= 25, label='Apellido')
+    email = forms.EmailField(max_length= 50, label='Correo electronico')
+    password = forms.CharField(widget=forms.PasswordInput(), label='Contraseña')
+    password2 = forms.CharField(widget=forms.PasswordInput(), label='Confirmar contraseña')
     born = forms.DateField
 
     '''Validaciones'''
     def clean_password2(self):
-        password = self.cleaned_data['password1']
+        password = self.cleaned_data['password']
         password2 = self.cleaned_data['password2']
 
         if password != password2:
@@ -27,8 +27,10 @@ class FromCrearUsuario(forms.Form):
             raise forms.ValidationError('El Email elegido ya esta en uso.')
         return email
 
-'''class FromLogin(forms.Form):
-    pass
+class FromLogin(forms.Form):
+    email = forms.EmailField(max_length= 50, label='Correo electronico')
+    password = forms.CharField(widget=forms.PasswordInput(), label='Contraseña')
 
-class FromNuevaPublicacion(forms.From):
+
+'''class FromNuevaPublicacion(forms.From):
     pass'''

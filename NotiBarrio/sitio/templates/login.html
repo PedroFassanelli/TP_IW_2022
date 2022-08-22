@@ -3,5 +3,14 @@
 {% block namepage %}Login{% endblock %}
 
 {% block contents %}
-<h1>Login</h1>
+<div ALIGN="center">
+    <h2>Iniciar Sesion</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Iniciar</button>
+        <p><a href="{% url 'register' %}">Registrarse</a></p>
+        <p><a href="{% url 'homepage' %}">Cancelar</a></p>
+    </form>
+</div>
 {% endblock %}
