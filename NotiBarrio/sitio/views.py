@@ -1,15 +1,50 @@
 from multiprocessing import context
 from django.shortcuts import render, redirect
 from django.contrib import auth, messages
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from sitio.models import *
 from sitio.forms import *
 from django.contrib.auth.decorators import login_required
+from .forms import NewUserForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.http import HttpResponse, HttpResponseRedirect
+
+def register_request(request):
+    if request.method == "POST":
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Registro completado.")
+            return redirect('homepage')
+        messages.error(request, "Datos inválidos.")
+    form = NewUserForm()
+    return render(request=request, template_name='registro.html', context={"register_form":form})
+
+def login_request(request):
+    if request.method =="POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"Ya estas loguado como {username}.")
+                return redirect('homepage')
+            else:
+                messages.error(request,"Usuario o contraseña inválido.")
+        else:
+            messages.error(request, "Usuario o contraseña inválido.")
+    form = AuthenticationForm()
+    return render(request=request, template_name="logueo.html", context={"login_form":form})
+
 
 def homepage(request):
     return render(request, 'homepage.html', {})
 
+'''
 def login(request):
     if not request.user.is_authenticated:
         if request.method == 'POST':
@@ -44,7 +79,7 @@ def login(request):
         return render(request, 'login.html', context)
     else:
         return redirect('homepage') 
-
+'''
 def register(request):
     if not request.user.is_authenticated:
         if request.method == 'POST':
@@ -82,10 +117,10 @@ def register(request):
 def notipublicas(request):
     return render(request, 'noticiaspublicas.html', {})
 
-@login_required(login_url= 'login')
+@login_required(login_url= 'logueo')
 def mibarrio(request):
     return render(request, 'mibarrio.html', {})
 
-@login_required(login_url= 'login')
+@login_required(login_url= 'logueo')
 def nuevaPublicacion(request):
     return render(request, 'nueva_publicacion.html', {})
