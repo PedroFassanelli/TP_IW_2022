@@ -3,9 +3,10 @@ from sitio.models import *
 from django.core.exceptions import ValidationError
 
 class FromCrearUsuario(forms.Form):
-    firs_name = forms.CharField(max_length= 15, label='Nombre')
+    first_name = forms.CharField(max_length= 15, label='Nombre')
     last_name = forms.CharField(max_length= 25, label='Apellido')
     email = forms.EmailField(max_length= 50, label='Correo electronico')
+    location = forms.CharField(max_length=50, label='Barrio')
     password = forms.CharField(widget=forms.PasswordInput(), label='Contraseña')
     password2 = forms.CharField(widget=forms.PasswordInput(), label='Confirmar contraseña')
     born = forms.DateField
