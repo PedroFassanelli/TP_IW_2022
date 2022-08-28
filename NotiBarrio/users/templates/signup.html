@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block namepage %}Sign Up{% endblock %}
+
+{% block contents %}
+<!--Register-->
+<div class="form-register" ALIGN="center">
+    <h1>Register</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                {{ field }}
+                {% for error in field.errors %}
+                    <div>
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button class="btn btn-primary" type="submit">Register</button>
+    </form>
+</div>
+
+{% endblock %}

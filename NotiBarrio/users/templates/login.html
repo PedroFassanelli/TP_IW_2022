@@ -3,14 +3,17 @@
 {% block namepage %}Login{% endblock %}
 
 {% block contents %}
+
+<!-- Log In -->
 <div class="form-register" ALIGN="center">
-    <h2>Iniciar Sesion</h2>
-    <form method="post">
+    <h1>Log In</h1>
+    <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <p><button class="botons" type="submit">INICIAR</button></p>
-        <p><a href="{% url 'register' %}">Registrarse</a></p>
+        <button class="btn btn-primary" type="submit">Log In</button>
+        <p><a href="{% url 'signup' %}">Registrarse</a></p>
         <p><a href="{% url 'homepage' %}">Cancelar</a></p>
     </form>
 </div>
+
 {% endblock %}

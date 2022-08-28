@@ -37,12 +37,17 @@
                         <li>
                           <a class="nav-link active" aria-current="page" href="{% url 'logout' %}">Cerrar Sesión</a>
                         </li>
+                        {% if user.is_staff %}
+                          <li>
+                            <a class="nav-link active" aria-current="page" href="/admin/">Administración</a>
+                          </li>
+                        {% endif %}
                       {% else %}
                         <li class="nav-item">
                           <a class="nav-link" href="{% url 'login' %}">INICIO SESION</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="{% url 'register' %}">REGISTRARSE</a>
+                          <a class="nav-link" href="{% url 'signup' %}">REGISTRARSE</a>
                         </li>
                       {% endif %}
                     </ul>
