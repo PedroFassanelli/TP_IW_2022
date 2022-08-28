@@ -20,7 +20,8 @@ class Usuario(models.Model):
     state = models.CharField(max_length=25, choices= Estados, default= 'Registrado')
 
 class Barrio(models.Model):
-    pass
+    namebarrio = models.CharField(max_length=50, default='None')
+    number = models.PositiveIntegerField()
 
 class Publicacion(models.Model):
     Estados = (
@@ -34,7 +35,10 @@ class Publicacion(models.Model):
     title = models.CharField(max_length= 50)
     text = models.TextField(max_length= 250)
     publicationdate = models.DateTimeField()
-    is_public = models.BooleanField(default= True)
+    is_public = models.BooleanField(default= False)
     state = models.CharField(max_length=25, choices= Estados, default= 'Borrador')
     likes = models.IntegerField(default= 0)
     dislikes = models.IntegerField(default= 0)
+    image_one = models.ImageField(upload_to = "static/sitio/multimedias/", null= True, blank = True, default='static/sitio/multimedias/logo.png')
+    image_two = models.ImageField(upload_to = "static/sitio/multimedias/", null= True, blank = True)
+    image_three = models.ImageField(upload_to = "static/sitio/multimedias/", null= True, blank = True)

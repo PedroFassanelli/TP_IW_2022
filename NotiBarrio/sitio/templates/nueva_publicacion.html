@@ -3,6 +3,13 @@
 {% block namepage %}Nueva Publicación{% endblock %}
 
 {% block contents %}
-<h1>Nueva Publicación</h1>
-
+<div class="form-publicar" ALIGN="center">
+    <h2>Nueva Publicación</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <p><button class="btn btn-primary" type="submit">PUBLICAR</button></p>
+        <p><a href="{% url 'mibarrio' %}">Cancelar </a></p>
+    </form>
+</div>
 {% endblock %}

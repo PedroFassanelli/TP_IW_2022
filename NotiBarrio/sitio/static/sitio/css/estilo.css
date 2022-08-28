@@ -12,7 +12,7 @@
     height: 75px;
 }
 
-.form-register
+.form-register, .form-login, .form-publicar
 {
     width: 500px;
     background: rgba(10, 10, 10, 0.823);
