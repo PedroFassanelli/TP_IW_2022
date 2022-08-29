@@ -19,9 +19,16 @@ class Usuario(models.Model):
     location = models.CharField(max_length= 25, null= False, blank= False)
     state = models.CharField(max_length=25, choices= Estados, default= 'Registrado')
 
+    def __str__(self):
+        text = "{0}, ({1})"
+        return text.format(self.email, (self.first_name + ' ' + self.last_name))
+
 class Barrio(models.Model):
     namebarrio = models.CharField(max_length=50, default='None')
-    number = models.PositiveIntegerField()
+    number = models.PositiveIntegerField(default= 0)
+
+    def __str__(self):
+        return self.namebarrio
 
 class Publicacion(models.Model):
     Estados = (
@@ -42,3 +49,7 @@ class Publicacion(models.Model):
     image_one = models.ImageField(upload_to = "static/sitio/multimedias/", null= True, blank = True, default='static/sitio/multimedias/logo.png')
     image_two = models.ImageField(upload_to = "static/sitio/multimedias/", null= True, blank = True)
     image_three = models.ImageField(upload_to = "static/sitio/multimedias/", null= True, blank = True)
+
+    def __str__(self):
+        text = "{0}, ({1})"
+        return text.format(self.title, (self.user + ' ' + self.location))
