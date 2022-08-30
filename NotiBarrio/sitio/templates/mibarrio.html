@@ -3,6 +3,26 @@
 {% block namepage %}Mi Barrio{% endblock %}
 
 {% block contents %}
-<h1>Mi Barrio</h1>
-<p><a href="{% url 'nuevapublicacion' %}">Publicar</a></p>
+
+<div ALIGN="center">
+    {% if user.location == 'None' %}
+        <h2>Aun no estas en un grupo de barrio</h2>
+        <h2>Selecciona el barrio al que quieres unirte:</h2>
+        {% for barrio in lista_barrios %}
+            <p>{{ barrio.number }} {{ barrio.namebarrio }}</p>
+        {% endfor %}
+    {% else %}
+        <p><a href="{% url 'nuevapublicacion' %}">Publicar</a></p>
+        {% if vacia == False %}
+            {% for mi_barrio in lista_mibarrio %}
+                <h3>{{ mi_barrio.title }} {{ mi_barrio.publicationdate}}</h3>
+                <p>{{ mi_barrio.text }}</p>
+                <p>Likes {{ mi_barrio.likes }} Dislikes {{ mi_barrio.dislikes }}</p>
+            {% endfor %}
+        {% else %}
+            <h2>Todavia no hay publicaciones</h2>
+        {% endif %}
+    {% endif %}
+</div>
+
 {% endblock %}

@@ -1,5 +1,7 @@
+from sre_parse import State
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from sitio.models import Barrio, Publicacion
 from sitio.forms import FormNuevaPublicacion 
 
 def homepage(request):
@@ -12,7 +14,12 @@ def notipublicas(request):
 
 @login_required(login_url='login')
 def mibarrio(request):
-    return render(request, 'mibarrio.html')
+    barrios = Barrio.objects.all().order_by("number")
+    mi_barrio = Publicacion.objects.filter(state="Publicado")
+    vacio = False
+    if len(mi_barrio) == 0:
+        vacio = True
+    return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio})
 
 
 @login_required(login_url='login')
