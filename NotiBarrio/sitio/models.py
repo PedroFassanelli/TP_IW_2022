@@ -3,7 +3,7 @@ import email
 from django.db import models
 from django.contrib.auth.models import User
 
-class Usuario(models.Model):
+'''class Usuario(models.Model):
     Estados = (
         ('Registrado', 'Usuario normal'),
         ('Moderador', 'Usuario con permisos'),
@@ -21,9 +21,7 @@ class Usuario(models.Model):
 
     def __str__(self):
         text = "{0}, ({1})"
-        return text.format(self.email, (self.first_name + ' ' + self.last_name))
-
-
+        return text.format(self.email, (self.first_name + ' ' + self.last_name))'''
 
 class Barrio(models.Model):
     namebarrio = models.CharField(max_length=50, default='None')
@@ -33,7 +31,16 @@ class Barrio(models.Model):
         return self.namebarrio
 
 class CustomUser(models.Model):
+    Estados = (
+        ('Registrado', 'Usuario normal'),
+        ('Moderador', 'Usuario con permisos'),
+        ('Baneado', 'Usuario baneado'),
+        ('Eliminado', 'Usuario eliminado'),
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    denounced = models.IntegerField(default= 0)
+    born = models.DateField(null= False, blank= False, default=None)
+    state = models.CharField(max_length=25, choices= Estados, default= 'Registrado')
     barrio = models.ForeignKey(Barrio, blank=True, on_delete=models.DO_NOTHING)
 
 class Publicacion(models.Model):
@@ -44,7 +51,7 @@ class Publicacion(models.Model):
     )
     location = models.ForeignKey(Barrio, blank= False, null= False, on_delete=models.CASCADE)
     denounced = models.IntegerField(default= 0)
-    user = User.email
+    user = models.EmailField(default=None)
     title = models.CharField(max_length= 50)
     text = models.TextField(max_length= 250)
     publicationdate = models.DateTimeField()
@@ -58,4 +65,4 @@ class Publicacion(models.Model):
 
     def __str__(self):
         text = "{0}, ({1})"
-        return text.format(self.title, (self.user + ' ' + self.location))
+        return text.format(self.title, (self.user + ' ' + self.location.namebarrio))

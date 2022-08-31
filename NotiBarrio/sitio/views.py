@@ -15,7 +15,7 @@ def notipublicas(request):
 @login_required(login_url='login')
 def mibarrio(request):
     barrios = Barrio.objects.all().order_by("number")
-    mi_barrio = Publicacion.objects.filter(state="Publicado")
+    mi_barrio = Publicacion.objects.order_by('-publicationdate').filter(state="Publicado")
     vacio = False
     if len(mi_barrio) == 0:
         vacio = True
@@ -29,7 +29,8 @@ def nuevaPublicacion(request):
         if form.is_valid():
             new_publicacion = form.save(commit=False)
             new_publicacion.user = request.user
-            new_publicacion.save()
+            publicacion = Publicacion.objects.create(new_publicacion)
+            publicacion.save()
             return redirect('mis_articulos')
     else:
         form = FormNuevaPublicacion()

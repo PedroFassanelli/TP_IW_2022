@@ -15,9 +15,9 @@
         <p><a href="{% url 'nuevapublicacion' %}">Publicar</a></p>
         {% if vacia == False %}
             {% for mi_barrio in lista_mibarrio %}
-                <h3>{{ mi_barrio.title }} {{ mi_barrio.publicationdate}}</h3>
+                <h3>{{ mi_barrio.title }}</h3>
                 <p>{{ mi_barrio.text }}</p>
-                <p>Likes {{ mi_barrio.likes }} Dislikes {{ mi_barrio.dislikes }}</p>
+                <p>Likes {{ mi_barrio.likes }} - Dislikes {{ mi_barrio.dislikes }} - {{ mi_barrio.user }} - {{ mi_barrio.publicationdate}}</p>
             {% endfor %}
         {% else %}
             <h2>Todavia no hay publicaciones</h2>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Usuario, Barrio, Publicacion, CustomUser
+from .models import Barrio, Publicacion, CustomUser
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
@@ -15,12 +15,12 @@ class UserAdmin(BaseUserAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
-@admin.register(Usuario)
+'''@admin.register(Usuario)
 class UsuarioAdmin(admin.ModelAdmin):
     search_fields = ('id', 'email', 'first_name', 'last_name')
     list_display = ('id', 'email', 'first_name', 'last_name')
     list_display_links = ('id', 'email')
-    list_per_page = 10
+    list_per_page = 10'''
 
 @admin.register(Barrio)
 class BarrioAdmin(admin.ModelAdmin):
