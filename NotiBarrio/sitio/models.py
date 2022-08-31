@@ -23,12 +23,18 @@ class Usuario(models.Model):
         text = "{0}, ({1})"
         return text.format(self.email, (self.first_name + ' ' + self.last_name))
 
+
+
 class Barrio(models.Model):
     namebarrio = models.CharField(max_length=50, default='None')
     number = models.PositiveIntegerField(default= 0)
 
     def __str__(self):
         return self.namebarrio
+
+class CustomUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    barrio = models.ForeignKey(Barrio, blank=True, on_delete=models.DO_NOTHING)
 
 class Publicacion(models.Model):
     Estados = (
