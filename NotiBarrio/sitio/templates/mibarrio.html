@@ -4,7 +4,7 @@
 
 {% block contents %}
 
-<div ALIGN="center">
+<div class="lista-publicacion" ALIGN="center">
     {% if user.location == 'None' %}
         <h2>Aun no estas en un grupo de barrio</h2>
         <h2>Selecciona el barrio al que quieres unirte:</h2>
@@ -12,12 +12,14 @@
             <p>{{ barrio.number }} {{ barrio.namebarrio }}</p>
         {% endfor %}
     {% else %}
-        <p><a href="{% url 'nuevapublicacion' %}">Publicar</a></p>
+        <a href="{% url 'nuevapublicacion' %}"><button class="btn btn-primary" type="submit">Publicar</button></a>
         {% if vacia == False %}
             {% for mi_barrio in lista_mibarrio %}
-                <h3>{{ mi_barrio.title }}</h3>
-                <p>{{ mi_barrio.text }}</p>
-                <p>Likes {{ mi_barrio.likes }} - Dislikes {{ mi_barrio.dislikes }} - {{ mi_barrio.user }} - {{ mi_barrio.publicationdate}}</p>
+                <div class="publicacion">
+                    <h3>{{ mi_barrio.title }}</h3>
+                    <p>{{ mi_barrio.text }}</p>
+                    <p>Likes {{ mi_barrio.likes }} - Dislikes {{ mi_barrio.dislikes }} - {{ mi_barrio.user }} - {{ mi_barrio.publicationdate}}</p>
+                </div>
             {% endfor %}
         {% else %}
             <h2>Todavia no hay publicaciones</h2>

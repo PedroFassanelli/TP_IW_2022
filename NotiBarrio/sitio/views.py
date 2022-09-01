@@ -5,11 +5,19 @@ from sitio.models import Barrio, Publicacion
 from sitio.forms import FormNuevaPublicacion 
 
 def homepage(request):
-    return render(request, 'homepage.html')
+    publicaciones = Publicacion.objects.order_by('-publicationdate').filter(is_public=True).filter(state="Publicado")[:5]
+    vacio = False
+    if len(publicaciones) == 0:
+        vacio = True
+    return render(request, 'homepage.html', {'lista_publicaciones': publicaciones, 'vacia': vacio})
 
 
 def notipublicas(request):
-    return render(request, 'noticiaspublicas.html')
+    publicaciones = Publicacion.objects.order_by('-publicationdate').filter(is_public=True).filter(state="Publicado")
+    vacio = False
+    if len(publicaciones) == 0:
+        vacio = True
+    return render(request, 'noticiaspublicas.html', {'lista_publicaciones': publicaciones, 'vacia': vacio})
 
 
 @login_required(login_url='login')

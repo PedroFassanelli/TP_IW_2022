@@ -3,7 +3,18 @@
 {% block namepage %}Mi Barrio{% endblock %}
 
 {% block contents %}
-<div ALIGN="center">
-    <h1>Noticias Publicas</h1>
+<div class="lista-publicacion" ALIGN="center">
+    <h2>Noticias Publicas</h2>
+    {% if vacia == False %}
+        {% for publicaciones in lista_publicaciones %}
+            <div class="publicacion">
+                <h3>{{ publicaciones.title }}</h3>
+                <p>{{ publicaciones.text }}</p>
+                <p>Likes {{ publicaciones.likes }} - Dislikes {{ publicaciones.dislikes }} - {{ publicaciones.user }} - {{ publicaciones.publicationdate}}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h3>Todavia no hay publicaciones</h3>
+    {% endif %}
 </div>
 {% endblock %}

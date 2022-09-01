@@ -3,14 +3,25 @@
 {% block namepage %}Homepage{% endblock %}
 
 {% block contents %}
-<div ALIGN="center">
-    <h1>Homepage</h1>
+
+<div class="lista-publicacion" ALIGN="center">
     {% if user.is_authenticated %}
-        Bienvendio {{ user.username }}!!
+        <h2>Bienvendio {{ user.username }}!!</h2>
         <p><a href="{% url 'logout' %}">Cerrar Sesión</a></p>
     {% else %}
         <p>No estas logueado</p>
         <a href="{% url 'login' %}" class="btn btn-secondary">Iniciar Sesión</a>
+    {% endif %}
+    {% if vacia == False %}
+        {% for publicaciones in lista_publicaciones %}
+            <div class="publicacion">
+                <h3>{{ publicaciones.title }}</h3>
+                <p>{{ publicaciones.text }}</p>
+                <p>Likes {{ publicaciones.likes }} - Dislikes {{ publicaciones.dislikes }} - {{ publicaciones.user }} - {{ publicaciones.publicationdate}}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h3>Todavia no hay publicaciones</h3>
     {% endif %}
 </div>
 {% endblock %}
