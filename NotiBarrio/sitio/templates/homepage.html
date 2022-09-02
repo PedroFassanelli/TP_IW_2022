@@ -12,12 +12,20 @@
         <p>No estas logueado</p>
         <a href="{% url 'login' %}" class="btn btn-secondary">Iniciar Sesión</a>
     {% endif %}
-    {% if vacia == False %}
+    {% if vacia == False %}  <!-- Muestra las 5 ultimas noticias publicas -->
         {% for publicaciones in lista_publicaciones %}
             <div class="publicacion">
                 <h3>{{ publicaciones.title }}</h3>
                 <p>{{ publicaciones.text }}</p>
-                <p>Likes {{ publicaciones.likes }} - Dislikes {{ publicaciones.dislikes }} - {{ publicaciones.user }} - {{ publicaciones.publicationdate}}</p>
+                <p>{{ publicaciones.location.namebarrio }} - {{ publicaciones.user }} - {{ publicaciones.publicationdate}}</p>
+                <img src="{{ publicaciones.image_one }}" alt="">
+                <img src="{{ publicaciones.image_two }}" alt="">
+                <img src="{{ publicaciones.image_three }}" alt="">
+                {% if publicaciones.user == user.email %}
+                    <p><button class="btn" type="submit">Likes {{ publicaciones.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicaciones.dislikes }}</button> - <a class="btn" href="{% url 'edit_publicacion' %}">Editar</a></p>
+                {% else %}
+                    <p><button class="btn" type="submit">Likes {{ publicaciones.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicaciones.dislikes }}</button></p>
+                {% endif %}
             </div>
         {% endfor %}
     {% else %}

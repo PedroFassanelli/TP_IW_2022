@@ -43,3 +43,17 @@ def nuevaPublicacion(request):
     else:
         form = FormNuevaPublicacion()
     return render(request, 'nueva_publicacion.html', {"form": form})
+
+@login_required(login_url='login')
+def editarPublicacion(request):
+    if request.method == "POST":
+        form = FormNuevaPublicacion(request.POST, request.FILES)
+        if form.is_valid():
+            new_publicacion = form.save(commit=False)
+            new_publicacion.user = request.user
+            publicacion = Publicacion.objects.update(new_publicacion)
+            publicacion.save()
+            return redirect('mis_articulos')
+    else:
+        form = FormNuevaPublicacion()
+    return render(request, 'edit_publicacion.html', {"form": form})

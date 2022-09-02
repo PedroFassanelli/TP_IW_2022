@@ -1,16 +1,26 @@
 {% extends 'base.html' %}
 
-{% block namepage %}Mi Barrio{% endblock %}
+{% block namepage %}Noticias Publicas{% endblock %}
 
 {% block contents %}
 <div class="lista-publicacion" ALIGN="center">
     <h2>Noticias Publicas</h2>
-    {% if vacia == False %}
+    {% if vacia == False %} <!-- Muestra todas las noticias publicas -->
         {% for publicaciones in lista_publicaciones %}
             <div class="publicacion">
-                <h3>{{ publicaciones.title }}</h3>
-                <p>{{ publicaciones.text }}</p>
-                <p>Likes {{ publicaciones.likes }} - Dislikes {{ publicaciones.dislikes }} - {{ publicaciones.user }} - {{ publicaciones.publicationdate}}</p>
+                <div>
+                    <h3>{{ publicaciones.title }}</h3>
+                    <p>{{ publicaciones.text }}</p>
+                    <p>{{ publicaciones.location.namebarrio }} - {{ publicaciones.user }} - {{ publicaciones.publicationdate}}</p>
+                    <img src="{{ publicaciones.image_one }}" alt="">
+                    <img src="{{ publicaciones.image_two }}" alt="">
+                    <img src="{{ publicaciones.image_three }}" alt="">
+                </div>
+                {% if publicaciones.user == user.email %}
+                    <p><button class="btn" type="submit">Likes {{ publicaciones.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicaciones.dislikes }}</button> - <a class="btn" href="{% url 'edit_publicacion' %}">Editar</a></p>
+                {% else %}
+                    <p><button class="btn" type="submit">Likes {{ publicaciones.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicaciones.dislikes }}</button></p>
+                {% endif %}
             </div>
         {% endfor %}
     {% else %}
