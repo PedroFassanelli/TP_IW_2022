@@ -22,7 +22,7 @@
                 <img src="{{ publicaciones.image_two }}" alt="">
                 <img src="{{ publicaciones.image_three }}" alt="">
                 {% if publicaciones.user == user.email %}
-                    <p><button class="btn" type="submit">Likes {{ publicaciones.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicaciones.dislikes }}</button> - <a class="btn" href="{% url 'edit_publicacion' %}">Editar</a></p>
+                    <p><button class="btn" type="submit">Likes {{ publicaciones.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicaciones.dislikes }}</button> - <a class="btn" href="{% url 'edit_publicacion' publicaciones.id %}">Editar</a> - <a class="btn" href="{% url 'eliminar' publicaciones.id %}">Eliminar</a></p>
                 {% else %}
                     <p><button class="btn" type="submit">Likes {{ publicaciones.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicaciones.dislikes }}</button></p>
                 {% endif %}

@@ -1,3 +1,5 @@
+from datetime import datetime
+from hashlib import new
 from sre_parse import State
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -14,10 +16,11 @@ def homepage(request):
 
 def notipublicas(request):
     publicaciones = Publicacion.objects.order_by('-publicationdate').filter(is_public=True).filter(state="Publicado")
+    barrios = Barrio.objects.all()
     vacio = False
     if len(publicaciones) == 0:
         vacio = True
-    return render(request, 'noticiaspublicas.html', {'lista_publicaciones': publicaciones, 'vacia': vacio})
+    return render(request, 'noticiaspublicas.html', {'lista_publicaciones': publicaciones, 'vacia': vacio, 'lista_barrios': barrios})
 
 
 @login_required(login_url='login')
@@ -36,24 +39,46 @@ def nuevaPublicacion(request):
         form = FormNuevaPublicacion(request.POST, request.FILES)
         if form.is_valid():
             new_publicacion = form.save(commit=False)
-            new_publicacion.user = request.user
-            publicacion = Publicacion.objects.create(new_publicacion)
-            publicacion.save()
-            return redirect('mis_articulos')
+            Publicacion.objects.create(
+                new_publicacion,
+                publicationdate = datetime.now,
+                user = request.user.email,
+                state = 'Publicado',
+                title = new_publicacion.title,
+                text = new_publicacion.text,
+                image_one = new_publicacion.image_one,
+                image_two = new_publicacion.image_two,
+                image_three = new_publicacion.image_three,
+                is_public = new_publicacion.is_public
+                )
+            return redirect('mibarrio')
     else:
         form = FormNuevaPublicacion()
     return render(request, 'nueva_publicacion.html', {"form": form})
 
 @login_required(login_url='login')
-def editarPublicacion(request):
-    if request.method == "POST":
-        form = FormNuevaPublicacion(request.POST, request.FILES)
+def editarPublicacion(request, id_publicacion):
+    publicacion = Publicacion.objects.filter(id = id_publicacion)
+    form = FormNuevaPublicacion(request.POST, request.FILES or None, instance=publicacion)
+    if request.user.email == publicacion.user:
         if form.is_valid():
-            new_publicacion = form.save(commit=False)
-            new_publicacion.user = request.user
-            publicacion = Publicacion.objects.update(new_publicacion)
-            publicacion.save()
-            return redirect('mis_articulos')
+            form.save()
+            return redirect('homepage')
+        return render(request, 'edit_publicacion.html', {"form": form})
     else:
-        form = FormNuevaPublicacion()
-    return render(request, 'edit_publicacion.html', {"form": form})
+        return redirect('homepage')
+
+    '''if request.method == "POST":
+        form = FormNuevaPublicacion(request.POST, request.FILES or None, instance=publicacion)
+        if form.is_valid():
+            form.save()
+            return redirect('mibarrio')
+    else:
+        form = FormNuevaPublicacion(instance=publicacion)
+    return render(request, 'edit_publicacion.html', {"form": form})'''
+
+@login_required(login_url='login')
+def eliminarPublicacion(request, id_publicacion):
+    publicacion = Publicacion.objects.filter(id = id_publicacion)
+    publicacion.delete()
+    return redirect ('homepage')
