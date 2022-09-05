@@ -57,6 +57,22 @@
         </header>
         <!-- Fin Header Menu area -->
 
+        <!-- Mensajes -->
+        <main role="main" class="container">
+          <div class="row">
+            <div class="col-md-8 mx-auto">
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }} alert-dismissable fade show">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+              {% block content %}{% endblock %}
+            </div>
+          </div>
+        </main>
+
         <!-- Contenido de cada html -->
         {% block contents %}
         {% endblock %}
