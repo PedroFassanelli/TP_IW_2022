@@ -15,7 +15,7 @@
     {% if vacia == False %}  <!-- Muestra las 5 ultimas noticias publicas -->
         {% for publicaciones in lista_publicaciones %}
             <div class="publicacion">
-                <h3>{{ publicaciones.title }}</h3>
+                <h3><a href="{% url 'detallepublicacion' publicaciones.id %}">{{ publicaciones.title }}</a></h3>
                 <p>{{ publicaciones.text }}</p>
                 <p>{{ publicaciones.location.namebarrio }} - {{ publicaciones.user }} - {{ publicaciones.publicationdate}}</p>
                 <img src="{{ publicaciones.image_one }}" alt="">

@@ -6,7 +6,7 @@ from sitio.models import Publicacion
 class FormNuevaPublicacion(forms.ModelForm):
     class Meta:
         model = Publicacion
-        fields = ('title','text','is_public', 'image_one', 'image_two', 'image_three')
+        fields = ('title','text', 'location', 'is_public', 'image_one', 'image_two', 'image_three')
     
     def __init__(self, *args, **kwargs):
         super(FormNuevaPublicacion, self).__init__(*args, **kwargs)

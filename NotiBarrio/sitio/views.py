@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from sitio.models import Barrio, Publicacion
 from sitio.forms import FormNuevaPublicacion 
+from django.contrib.auth.models import auth, User
 
 def homepage(request):
     publicaciones = Publicacion.objects.order_by('-publicationdate').filter(is_public=True).filter(state="Publicado")[:5]
@@ -34,22 +35,23 @@ def mibarrio(request):
 
 
 @login_required(login_url='login')
-def nuevaPublicacion(request):
+def nuevaPublicacion(request, id_user):
     if request.method == "POST":
         form = FormNuevaPublicacion(request.POST, request.FILES)
         if form.is_valid():
+            usuario = User.objects.filter(id = id_user)
             new_publicacion = form.save(commit=False)
+            new_publicacion.user = usuario.email,
             Publicacion.objects.create(
-                new_publicacion,
                 publicationdate = datetime.now,
-                user = request.user.email,
                 state = 'Publicado',
                 title = new_publicacion.title,
                 text = new_publicacion.text,
                 image_one = new_publicacion.image_one,
                 image_two = new_publicacion.image_two,
                 image_three = new_publicacion.image_three,
-                is_public = new_publicacion.is_public
+                is_public = new_publicacion.is_public,
+                user = new_publicacion.user,
                 )
             return redirect('mibarrio')
     else:
@@ -82,3 +84,7 @@ def eliminarPublicacion(request, id_publicacion):
     publicacion = Publicacion.objects.filter(id = id_publicacion)
     publicacion.delete()
     return redirect ('homepage')
+
+def detallePublicacion(request, id_publicacion):
+    publicacion = Publicacion.objects.filter(id = id_publicacion)
+    return render(request, 'detallepublicacion.html', {"lista_publicacion": publicacion})

@@ -12,11 +12,11 @@
             <p>{{ barrio.number }} {{ barrio.namebarrio }}</p>
         {% endfor %}
     {% else %} <!-- Si es true, le muestra todas las noticias del barrio al que pertenece -->
-        <a href="{% url 'nuevapublicacion' %}"><button class="btn btn-primary" type="submit">Publicar</button></a>
+        <a href="{% url 'nuevapublicacion' user.id %}"><button class="btn btn-primary" type="submit">Publicar</button></a>
         {% if vacia == False %}
             {% for mi_barrio in lista_mibarrio %}
                 <div class="publicacion">
-                    <h3>{{ mi_barrio.title }}</h3>
+                    <h3><a href="{% url 'detallepublicacion' mi_barrio.id %}">{{ mi_barrio.title }}</a></h3>
                     <p>{{ mi_barrio.text }}</p>
                     <p>{{ mi_barrio.user }} - {{ mi_barrio.publicationdate}}</p>
                     <img src="{{ mi_barrio.image_one }}" alt="">
