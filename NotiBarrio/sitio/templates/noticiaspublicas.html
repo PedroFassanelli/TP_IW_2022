@@ -3,26 +3,37 @@
 {% block namepage %}Noticias Publicas{% endblock %}
 
 {% block contents %}
-<div class="lista-publicacion" ALIGN="center">
-    <h2>Noticias Publicas</h2>
-    {% if vacia == False %} <!-- Muestra todas las noticias publicas -->
-        {% for publicaciones in lista_publicaciones %}
-            <div class="publicacion">
-                <h3><a href="{% url 'detallepublicacion' publicaciones.id %}">{{ publicaciones.title }}</a></h3>
-                <p>{{ publicaciones.text }}</p>
-                <p>{{ publicaciones.location.namebarrio }} - {{ publicaciones.user }} - {{ publicaciones.publicationdate}}</p>
-                <img src="{{ publicaciones.image_one }}" alt="">
-                <img src="{{ publicaciones.image_two }}" alt="">
-                <img src="{{ publicaciones.image_three }}" alt="">
-                {% if publicaciones.user == user.email %}
-                    <p><button class="btn" type="submit">Likes {{ publicaciones.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicaciones.dislikes }}</button> - <a class="btn" href="{% url 'edit_publicacion' publicaciones.id %}">Editar</a> - <a class="btn" href="{% url 'eliminar' publicaciones.id %}">Eliminar</a></p>
-                {% else %}
-                    <p><button class="btn" type="submit">Likes {{ publicaciones.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicaciones.dislikes }}</button></p>
-                {% endif %}
-            </div>
-        {% endfor %}
-    {% else %}
-        <h3>Todavia no hay publicaciones</h3>
-    {% endif %}
+<div class="wrap" ALIGN="center">
+    <div class="lista-publicacion">
+        <h2>Noticias Publicas</h2>
+        <div>
+            <a href="#" id="categoryItem" category="all"><button class="btn btn-primary" type="submit">Todos</button></a>
+            <a href="#" id="categoryItem" category="Recientes"><button class="btn btn-primary" type="submit">Más Recientes</button></a>
+            <a href="#" id="categoryItem" category="Antiguos"><button class="btn btn-primary" type="submit">Más Antiguos</button></a>
+            <a href="#" id="categoryItem" category="Likes"><button class="btn btn-primary" type="submit">Likes</button></a>
+            {% for barrio in lista_barrios %}
+                <a href="#" id="categoryItem" category="{{ barrio.namebarrio }}"><button class="btn btn-primary" type="submit">{{ barrio.namebarrio }}</button></a>
+            {% endfor %}
+        </div>
+        {% if vacia == False %} <!-- Muestra todas las noticias publicas -->
+            {% for publicaciones in lista_publicaciones %}
+                <div class="publicacion">
+                    <h3><a href="{% url 'detallepublicacion' publicaciones.id %}">{{ publicaciones.title }}</a></h3>
+                    <p>{{ publicaciones.text }}</p>
+                    <p>{{ publicaciones.location.namebarrio }} - {{ publicaciones.user }} - {{ publicaciones.publicationdate}}</p>
+                    <img src="{{ publicaciones.image_one }}" alt="">
+                    <img src="{{ publicaciones.image_two }}" alt="">
+                    <img src="{{ publicaciones.image_three }}" alt="">
+                    {% if publicaciones.user == user.email %}
+                        <p><button class="btn" type="submit">Likes {{ publicaciones.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicaciones.dislikes }}</button> - <a class="btn" href="{% url 'edit_publicacion' publicaciones.id %}">Editar</a> - <a class="btn" href="{% url 'eliminar' publicaciones.id %}">Eliminar</a></p>
+                    {% else %}
+                        <p><button class="btn" type="submit">Likes {{ publicaciones.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicaciones.dislikes }}</button></p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <h3>Todavia no hay publicaciones</h3>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

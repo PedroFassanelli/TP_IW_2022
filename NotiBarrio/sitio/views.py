@@ -1,6 +1,7 @@
 from datetime import datetime
 from hashlib import new
 from sre_parse import State
+from time import timezone
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from sitio.models import Barrio, Publicacion
@@ -41,9 +42,8 @@ def nuevaPublicacion(request, id_user):
         if form.is_valid():
             usuario = User.objects.filter(id = id_user)
             new_publicacion = form.save(commit=False)
-            new_publicacion.user = usuario.email,
             Publicacion.objects.create(
-                publicationdate = datetime.now,
+                publicationdate = datetime.today(),
                 state = 'Publicado',
                 title = new_publicacion.title,
                 text = new_publicacion.text,
@@ -51,7 +51,8 @@ def nuevaPublicacion(request, id_user):
                 image_two = new_publicacion.image_two,
                 image_three = new_publicacion.image_three,
                 is_public = new_publicacion.is_public,
-                user = new_publicacion.user,
+                user = usuario[0].email,
+                location = new_publicacion.location,
                 )
             return redirect('mibarrio')
     else:
@@ -61,8 +62,8 @@ def nuevaPublicacion(request, id_user):
 @login_required(login_url='login')
 def editarPublicacion(request, id_publicacion):
     publicacion = Publicacion.objects.filter(id = id_publicacion)
-    form = FormNuevaPublicacion(request.POST, request.FILES or None, instance=publicacion)
-    if request.user.email == publicacion.user:
+    form = FormNuevaPublicacion(request.POST, request.FILES or None, instance=publicacion[0])
+    if request.user.email == publicacion[0].user:
         if form.is_valid():
             form.save()
             return redirect('homepage')

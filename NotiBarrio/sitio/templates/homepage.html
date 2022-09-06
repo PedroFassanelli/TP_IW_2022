@@ -7,7 +7,6 @@
 <div class="lista-publicacion" ALIGN="center">
     {% if user.is_authenticated %}
         <h2>Bienvendio {{ user.username }}!!</h2>
-
     {% else %}
         <p>No estas logueado</p>
         <a href="{% url 'login' %}" class="btn btn-secondary">Iniciar Sesión</a>
