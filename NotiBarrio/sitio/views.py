@@ -2,11 +2,13 @@ from datetime import datetime
 from hashlib import new
 from sre_parse import State
 from time import timezone
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from sitio.models import Barrio, Publicacion
-from sitio.forms import FormNuevaPublicacion 
+from django.contrib import messages
 from django.contrib.auth.models import auth, User
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from sitio.models import Barrio, Publicacion
+from sitio.forms import FormNuevaPublicacion
+
 
 def homepage(request):
     publicaciones = Publicacion.objects.order_by('-publicationdate').filter(is_public=True).filter(state="Publicado")[:5]
@@ -59,32 +61,33 @@ def nuevaPublicacion(request, id_user):
         form = FormNuevaPublicacion()
     return render(request, 'nueva_publicacion.html', {"form": form})
 
+
 @login_required(login_url='login')
 def editarPublicacion(request, id_publicacion):
-    publicacion = Publicacion.objects.filter(id = id_publicacion)
-    form = FormNuevaPublicacion(request.POST, request.FILES or None, instance=publicacion[0])
-    if request.user.email == publicacion[0].user:
+    context = {}
+    try:
+        publicacion = Publicacion.objects.get(pk = id_publicacion)
+    except Publicacion.DoesNotExist:
+        messages.error(request, f"La publicación no existe")
+        return redirect('homepage')
+    context['instance'] = publicacion
+    if request.method == 'POST':
+        form = FormNuevaPublicacion(request.POST, instance=publicacion)
         if form.is_valid():
             form.save()
             return redirect('homepage')
-        return render(request, 'edit_publicacion.html', {"form": form})
-    else:
-        return redirect('homepage')
-
-    '''if request.method == "POST":
-        form = FormNuevaPublicacion(request.POST, request.FILES or None, instance=publicacion)
-        if form.is_valid():
-            form.save()
-            return redirect('mibarrio')
     else:
         form = FormNuevaPublicacion(instance=publicacion)
-    return render(request, 'edit_publicacion.html', {"form": form})'''
+    context['form'] = form
+    return render(request, 'edit_publicacion.html', context=context)
+
 
 @login_required(login_url='login')
 def eliminarPublicacion(request, id_publicacion):
     publicacion = Publicacion.objects.filter(id = id_publicacion)
     publicacion.delete()
     return redirect ('homepage')
+
 
 def detallePublicacion(request, id_publicacion):
     publicacion = Publicacion.objects.filter(id = id_publicacion)
