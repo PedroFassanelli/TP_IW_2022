@@ -3,16 +3,16 @@
 {% block namepage %}Noticias Publicas{% endblock %}
 
 {% block contents %}
-<div class="wrap" ALIGN="center">
+<div ALIGN="center">
     <div class="lista-publicacion">
         <h2>Noticias Publicas</h2>
         <div>
-            <a href="#" id="categoryItem" category="all"><button class="btn btn-primary" type="submit">Todos</button></a>
-            <a href="#" id="categoryItem" category="Recientes"><button class="btn btn-primary" type="submit">Más Recientes</button></a>
-            <a href="#" id="categoryItem" category="Antiguos"><button class="btn btn-primary" type="submit">Más Antiguos</button></a>
-            <a href="#" id="categoryItem" category="Likes"><button class="btn btn-primary" type="submit">Likes</button></a>
+            <a href="{% url 'filtropublicacion' 'all' %}"><button class="btn btn-primary" type="submit">Todos</button></a>
+            <a href="{% url 'filtropublicacion' 'reciente' %}"><button class="btn btn-primary" type="submit">Más Recientes</button></a>
+            <a href="{% url 'filtropublicacion' 'antiguo' %}"><button class="btn btn-primary" type="submit">Más Antiguos</button></a>
+            <a href="{% url 'filtropublicacion' 'like' %}"><button class="btn btn-primary" type="submit">Likes</button></a>
             {% for barrio in lista_barrios %}
-                <a href="#" id="categoryItem" category="{{ barrio.namebarrio }}"><button class="btn btn-primary" type="submit">{{ barrio.namebarrio }}</button></a>
+                <a href="{% url 'filtropublicacion' barrio.namebarrio %}"><button class="btn btn-primary" type="submit">{{ barrio.namebarrio }}</button></a>
             {% endfor %}
         </div>
         {% if vacia == False %} <!-- Muestra todas las noticias publicas -->

@@ -1,9 +1,6 @@
 from datetime import datetime
-from hashlib import new
-from sre_parse import State
-from time import timezone
 from django.contrib import messages
-from django.contrib.auth.models import auth, User
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from sitio.models import Barrio, Publicacion
@@ -21,6 +18,24 @@ def homepage(request):
 def notipublicas(request):
     publicaciones = Publicacion.objects.order_by('-publicationdate').filter(is_public=True).filter(state="Publicado")
     barrios = Barrio.objects.all()
+    vacio = False
+    if len(publicaciones) == 0:
+        vacio = True
+    return render(request, 'noticiaspublicas.html', {'lista_publicaciones': publicaciones, 'vacia': vacio, 'lista_barrios': barrios})
+
+def filtropublicacion(request, filtro):
+    barrios = Barrio.objects.all()
+
+    if filtro == 'all' or filtro == 'reciente':
+        publicaciones = Publicacion.objects.order_by('-publicationdate').filter(is_public=True).filter(state="Publicado")
+    elif filtro == 'antiguo':
+        publicaciones = Publicacion.objects.order_by('publicationdate').filter(is_public=True).filter(state="Publicado")
+    elif filtro == 'like':
+        publicaciones = Publicacion.objects.order_by('-likes').filter(is_public=True).filter(state="Publicado")
+    else:
+        barrio_filtro = Barrio.objects.filter(namebarrio=filtro)
+        publicaciones = Publicacion.objects.order_by('-publicationdate').filter(location=barrio_filtro[0]).filter(is_public=True).filter(state="Publicado")
+
     vacio = False
     if len(publicaciones) == 0:
         vacio = True
