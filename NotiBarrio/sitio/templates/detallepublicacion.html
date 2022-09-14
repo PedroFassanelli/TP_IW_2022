@@ -14,11 +14,21 @@
             <img src="{{ publicacion.image_two }}" alt="">
             <img src="{{ publicacion.image_three }}" alt="">
             {% if publicacion.user == user.email %}
-                <p><button class="btn" type="submit">Likes {{ publicacion.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicacion.dislikes }}</button> - <a class="btn" href="{% url 'edit_publicacion' publicacion.id %}">Editar</a> - <a class="btn" href="{% url 'eliminar' publicacion.id %}">Eliminar</a></p>
+                <p><button class="btn" type="submit">Likes {{ publicacion.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicacion.dislikes }}</button> - <a class="btn" href="{% url 'detallepublicacion' publicacion.id %}">Comentar</a> - <a class="btn" href="{% url 'edit_publicacion' publicacion.id %}">Editar</a> - <a class="btn" href="{% url 'eliminar' publicacion.id %}">Eliminar</a></p>
             {% else %}
-                <p><button class="btn" type="submit">Likes {{ publicacion.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicacion.dislikes }}</button></p>
+                <p><button class="btn" type="submit">Likes {{ publicacion.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicacion.dislikes }}</button> - <a class="btn" href="{% url 'detallepublicacion' publicacion.id %}">Comentar</a></p>
             {% endif %}
         </div>
+        {% for comentario in lista_comentario %}
+            <div class="comentario">
+                <p>{{ comentario.text }}</p>
+                {% if comentario.user == user.email %}
+                    <p>{{ comentario.user }} - {{ comentario.comentdate}} - <a class="btn" href="{% url 'eliminarcomentario' comentario.id %}">Eliminar</a></p>
+                {% else %}
+                    <p>{{ comentario.user }} - {{ comentario.comentdate}}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
     {% endfor %}
 </div>
 {% endblock %}

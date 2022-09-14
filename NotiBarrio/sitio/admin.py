@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Barrio, Publicacion, CustomUser
+from .models import Barrio, Publicacion, Comentario, CustomUser
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
@@ -34,4 +34,11 @@ class PublicacionAdmin(admin.ModelAdmin):
     search_fields = ('id', 'title', 'user', 'location')
     list_display = ('id', 'title', 'user', 'location')
     list_display_links = ('id', 'title')
+    list_per_page = 10
+
+@admin.register(Comentario)
+class ComentarioAdmin(admin.ModelAdmin):
+    search_fields = ('id', 'text', 'user')
+    list_display = ('id', 'text', 'user')
+    list_display_links = ('id', 'user','text')
     list_per_page = 10

@@ -3,8 +3,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from sitio.models import Barrio, Publicacion
-from sitio.forms import FormNuevaPublicacion
+from sitio.models import Barrio, Publicacion, Comentario
+from sitio.forms import FormNuevaPublicacion, FormNuevoComentario
 
 
 def homepage(request):
@@ -106,4 +106,11 @@ def eliminarPublicacion(request, id_publicacion):
 
 def detallePublicacion(request, id_publicacion):
     publicacion = Publicacion.objects.filter(id = id_publicacion)
-    return render(request, 'detallepublicacion.html', {"lista_publicacion": publicacion})
+    comentarios = Comentario.objects.filter(id_publicacion = id_publicacion).order_by('comentdate')
+    return render(request, 'detallepublicacion.html', {"lista_publicacion": publicacion, "lista_comentario": comentarios})
+
+@login_required(login_url='login')
+def eliminarComentario(request, id_comentario):
+    comentario = Comentario.objects.filter(id = id_comentario)
+    comentario.delete()
+    return redirect ('homepage')

@@ -1,5 +1,3 @@
-import email
-#from tkinter import CASCADE
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -66,3 +64,13 @@ class Publicacion(models.Model):
     def __str__(self):
         text = "{0}, ({1})"
         return text.format(self.title, (self.user + ' ' + self.location.namebarrio))
+
+class Comentario(models.Model):
+    id_publicacion = models.IntegerField()
+    user = models.EmailField()
+    text = models.TextField(max_length= 250)
+    comentdate = models.DateTimeField()
+
+    def __str__(self):
+        text = "{0}, ({1})"
+        return text.format(self.text, (self.user + ' ' + str(self.id_publicacion)))

@@ -9,4 +9,5 @@ urlpatterns = [
     path('eliminar/<int:id_publicacion>/', views.eliminarPublicacion, name='eliminar'),
     path('detallepublicacion/<int:id_publicacion>/', views.detallePublicacion, name='detallepublicacion'),
     path('filtro/<str:filtro>/', views.filtropublicacion, name='filtropublicacion'),
+    path('eliminarcomentario/<int:id_comentario>/', views.eliminarComentario, name='eliminarcomentario'),
 ]
