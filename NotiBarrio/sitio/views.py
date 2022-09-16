@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from sitio.models import Barrio, Publicacion, Comentario
+from sitio.models import Barrio, Publicacion, Comentario, CustomUser
 from sitio.forms import FormNuevaPublicacion, FormNuevoComentario
 
 
@@ -58,6 +58,7 @@ def nuevaPublicacion(request, id_user):
         form = FormNuevaPublicacion(request.POST, request.FILES)
         if form.is_valid():
             usuario = User.objects.filter(id = id_user)
+            custom = CustomUser.objects.filter(user_id = id_user)
             new_publicacion = form.save(commit=False)
             Publicacion.objects.create(
                 publicationdate = datetime.today(),
@@ -69,7 +70,7 @@ def nuevaPublicacion(request, id_user):
                 image_three = new_publicacion.image_three,
                 is_public = new_publicacion.is_public,
                 user = usuario[0].email,
-                location = new_publicacion.location,
+                location = custom[0].barrio,
                 )
             return redirect('mibarrio')
     else:
