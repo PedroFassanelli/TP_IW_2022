@@ -5,32 +5,36 @@
 {% block contents %}
 
 <div class="lista-publicacion" ALIGN="center">
-    {% if user.location == 'None' %} <!-- Pregunta si pertenece a un barrio, si es false le muestra una lista de barrios al cual unirse -->
+    {% if aceptado == 0 %} <!-- Pregunta si pertenece a un barrio, si es false le muestra una lista de barrios al cual unirse -->
         <h2>Aun no estas en un grupo de barrio</h2>
-        <h2>Selecciona el barrio al que quieres unirte:</h2>
+        <h3>Selecciona el barrio al que quieres unirte:</h3>
         {% for barrio in lista_barrios %}
             <p>{{ barrio.number }} {{ barrio.namebarrio }}</p>
         {% endfor %}
     {% else %} <!-- Si es true, le muestra todas las noticias del barrio al que pertenece -->
-        <a href="{% url 'nuevapublicacion' user.id %}"><button class="btn btn-primary" type="submit">Publicar</button></a>
-        {% if vacia == False %}
-            {% for mi_barrio in lista_mibarrio %}
-                <div class="publicacion">
-                    <h3><a href="{% url 'detallepublicacion' mi_barrio.id %}">{{ mi_barrio.title }}</a></h3>
-                    <p>{{ mi_barrio.text }}</p>
-                    <p>{{ mi_barrio.user }} - {{ mi_barrio.publicationdate}}</p>
-                    <img src="{{ mi_barrio.image_one }}" alt="">
-                    <img src="{{ mi_barrio.image_two }}" alt="">
-                    <img src="{{ mi_barrio.image_three }}" alt="">
-                    {% if mi_barrio.user == user.email %}
-                    <p><button class="btn" type="submit">Likes {{ mi_barrio.likes }}</button> - <button class="btn" type="submit">Dislikes {{ mi_barrio.dislikes }}</button> - <a class="btn" href="{% url 'detallepublicacion' mi_barrio.id %}">Comentar</a> - <a class="btn" href="{% url 'edit_publicacion' mi_barrio.id %}">Editar</a> - <a class="btn" href="{% url 'eliminar' mi_barrio.id %}">Eliminar</a></p>
-                    {% else %}
-                        <p><button class="btn" type="submit">Likes {{ mi_barrio.likes }}</button> - <button class="btn" type="submit">Dislikes {{ mi_barrio.dislikes }}</button> - <a class="btn" href="{% url 'detallepublicacion' mi_barrio.id %}">Comentar</a></p>
-                    {% endif %}
-                </div>
-            {% endfor %}
+        {% if aceptado == 1 %}
+            <h2>Aun no te aceptaron en el barrio: {{ nombre_barrio }}</h2>
         {% else %}
-            <h2>Todavia no hay publicaciones</h2>
+            <a href="{% url 'nuevapublicacion' user.id %}"><button class="btn btn-primary" type="submit">Publicar</button></a>
+            {% if vacia == False %}
+                {% for mi_barrio in lista_mibarrio %}
+                    <div class="publicacion">
+                        <h3><a href="{% url 'detallepublicacion' mi_barrio.id %}">{{ mi_barrio.title }}</a></h3>
+                        <p>{{ mi_barrio.text }}</p>
+                        <p>{{ mi_barrio.user }} - {{ mi_barrio.publicationdate}}</p>
+                        <img src="{{ mi_barrio.image_one }}" alt="">
+                        <img src="{{ mi_barrio.image_two }}" alt="">
+                        <img src="{{ mi_barrio.image_three }}" alt="">
+                        {% if mi_barrio.user == user.email %}
+                        <p><button class="btn" type="submit">Likes {{ mi_barrio.likes }}</button> - <button class="btn" type="submit">Dislikes {{ mi_barrio.dislikes }}</button> - <a class="btn" href="{% url 'detallepublicacion' mi_barrio.id %}">Comentar</a> - <a class="btn" href="{% url 'edit_publicacion' mi_barrio.id %}">Editar</a> - <a class="btn" href="{% url 'eliminar' mi_barrio.id %}">Eliminar</a></p>
+                        {% else %}
+                            <p><button class="btn" type="submit">Likes {{ mi_barrio.likes }}</button> - <button class="btn" type="submit">Dislikes {{ mi_barrio.dislikes }}</button> - <a class="btn" href="{% url 'detallepublicacion' mi_barrio.id %}">Comentar</a></p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <h2>Todavia no hay publicaciones</h2>
+            {% endif %}
         {% endif %}
     {% endif %}
 </div>

@@ -43,14 +43,27 @@ def filtropublicacion(request, filtro):
 
 
 @login_required(login_url='login')
-def mibarrio(request):
-    barrios = Barrio.objects.all().order_by("number")
-    mi_barrio = Publicacion.objects.order_by('-publicationdate').filter(state="Publicado")
+def mibarrio(request, id_user):
+    custom = CustomUser.objects.filter(user_id = id_user)
+    mi_barrio = []
+    barrios = []
+    aceptado = 0
     vacio = False
-    if len(mi_barrio) == 0:
-        vacio = True
-    return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio})
-
+    nombre_barrio = ""
+    if custom[0].is_accept == 0:
+        barrios = Barrio.objects.all().order_by("number")
+        return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio, 'aceptado': aceptado, 'nombre_barrio': nombre_barrio})
+    elif custom[0].is_accept == 1:
+        aceptado = 1
+        nombre_barrio = custom[0].barrio.namebarrio
+        return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio, 'aceptado': aceptado, 'nombre_barrio': nombre_barrio})
+    else:
+        mi_barrio = Publicacion.objects.order_by('-publicationdate').filter(location = custom[0].barrio).filter(state="Publicado")
+        aceptado = 2
+        if len(mi_barrio) == 0:
+            vacio = True
+            
+        return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio, 'aceptado': aceptado, 'nombre_barrio': nombre_barrio})
 
 @login_required(login_url='login')
 def nuevaPublicacion(request, id_user):
@@ -72,7 +85,8 @@ def nuevaPublicacion(request, id_user):
                 user = usuario[0].email,
                 location = custom[0].barrio,
                 )
-            return redirect('mibarrio')
+            #return redirect('mibarrio')
+            return redirect('homepage')
     else:
         form = FormNuevaPublicacion()
     return render(request, 'nueva_publicacion.html', {"form": form})
