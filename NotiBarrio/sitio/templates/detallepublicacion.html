@@ -4,7 +4,11 @@
 
 {% block contents %}
 <div class="lista-publicacion" ALIGN="center">
-    <p><a href="{% url 'homepage' %}">Ir a Homepage</a> - <a href="{% url 'mibarrio' user.id %}">Ir a Mi Barrio</a> - <a href="{% url 'notipublicas' %}">Ir a NOTI-PUBLICAS</a></p>
+    {% if user.is_authenticated %}
+        <p><a href="{% url 'homepage' %}">Ir a Homepage</a> - <a href="{% url 'mibarrio' user.id %}">Ir a Mi Barrio</a> - <a href="{% url 'notipublicas' %}">Ir a NOTI-PUBLICAS</a></p>
+    {% else %}
+        <p><a href="{% url 'homepage' %}">Ir a Homepage</a> - <a href="{% url 'notipublicas' %}">Ir a NOTI-PUBLICAS</a></p>
+    {% endif %}
     {% for publicacion in lista_publicacion %}
         <div class="publicacion">
             <h3>{{ publicacion.title }}</h3>

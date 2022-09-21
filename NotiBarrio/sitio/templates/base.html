@@ -29,10 +29,11 @@
                       <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{% url 'notipublicas' %}">NOTI-PUBLICAS</a>
                       </li>
-                      <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'mibarrio' user.id %}">MI BARRIO</a>
-                      </li>
+                      
                       {% if user.is_authenticated %}
+                        <li class="nav-item">
+                          <a class="nav-link active" aria-current="page" href="{% url 'mibarrio' user.id %}">MI BARRIO</a>
+                        </li>
                         <li class="nav-item">
                           <a class="nav-link active" aria-current="page" href="{% url 'homepage' %}">{{ user.username }}</a>
                         </li>
