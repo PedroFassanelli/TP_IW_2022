@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from django.db.models.signals import post_save
+
 '''class Usuario(models.Model):
     Estados = (
         ('Registrado', 'Usuario normal'),
@@ -37,10 +39,18 @@ class CustomUser(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     denounced = models.IntegerField(default= 0)
-    born = models.DateField(null= False, blank= False, default=None)
+    born = models.DateField(null= True, blank= False, default=None)
     state = models.CharField(max_length=25, choices= Estados, default= 'Registrado')
     is_accept = models.IntegerField(default= 0)
-    barrio = models.ForeignKey(Barrio, blank=True, on_delete=models.DO_NOTHING)
+    barrio = models.ForeignKey(Barrio, blank=True, null=True, on_delete=models.DO_NOTHING)
+
+#Creamos el CustomUser automaticamente cuando un usuario se registra
+def create_custom(sender, instance, created, **kwargs):
+    if created:
+        CustomUser.objects.create(user=instance)
+
+post_save.connect(create_custom, sender=User)
+
 
 class Publicacion(models.Model):
     Estados = (
