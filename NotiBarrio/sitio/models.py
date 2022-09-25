@@ -39,7 +39,6 @@ class CustomUser(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     denounced = models.IntegerField(default= 0)
-    born = models.DateField(null= True, blank= False, default=None)
     state = models.CharField(max_length=25, choices= Estados, default= 'Registrado')
     is_accept = models.IntegerField(default= 0)
     barrio = models.ForeignKey(Barrio, blank=True, null=True, on_delete=models.DO_NOTHING)
