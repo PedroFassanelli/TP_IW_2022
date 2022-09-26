@@ -1,4 +1,5 @@
 from datetime import datetime
+from tkinter.tix import INTEGER
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -50,20 +51,29 @@ def mibarrio(request, id_user):
     aceptado = 0
     vacio = False
     nombre_barrio = ""
-    if custom[0].is_accept == 0:
+    lista_solicitudes = []
+    solicitudes_vacio = False
+    if (custom[0].is_accept == 0):
         barrios = Barrio.objects.all().order_by("number")
-        return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio, 'aceptado': aceptado, 'nombre_barrio': nombre_barrio})
+        return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio, 'aceptado': aceptado, 'nombre_barrio': nombre_barrio, 'lista_solicitudes': lista_solicitudes, 'solicitudes_vacio': solicitudes_vacio})
     elif custom[0].is_accept == 1:
         aceptado = 1
         nombre_barrio = custom[0].barrio.namebarrio
-        return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio, 'aceptado': aceptado, 'nombre_barrio': nombre_barrio})
-    else:
+        return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio, 'aceptado': aceptado, 'nombre_barrio': nombre_barrio, 'lista_solicitudes': lista_solicitudes, 'solicitudes_vacio': solicitudes_vacio})
+    elif custom[0].is_accept == 2:
         mi_barrio = Publicacion.objects.order_by('-publicationdate').filter(location = custom[0].barrio).filter(state="Publicado")
         aceptado = 2
+        lista_solicitudes = CustomUser.objects.filter(barrio = custom[0].barrio). filter(is_accept = 1)
         if len(mi_barrio) == 0:
-            vacio = True
-            
-        return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio, 'aceptado': aceptado, 'nombre_barrio': nombre_barrio})
+            vacio = True 
+        if len(lista_solicitudes) == 0:
+            solicitudes_vacio = True  
+        return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio, 'aceptado': aceptado, 'nombre_barrio': nombre_barrio, 'lista_solicitudes': lista_solicitudes, 'solicitudes_vacio': solicitudes_vacio})
+    else:
+        aceptado = 3
+        nombre_barrio = custom[0].barrio.namebarrio
+        barrios = Barrio.objects.all().order_by("number").exclude(namebarrio = nombre_barrio)
+        return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio, 'aceptado': aceptado, 'nombre_barrio': nombre_barrio, 'lista_solicitudes': lista_solicitudes, 'solicitudes_vacio': solicitudes_vacio})
 
 @login_required(login_url='login')
 def nuevaPublicacion(request, id_user):
@@ -129,3 +139,25 @@ def eliminarComentario(request, id_comentario):
     comentario = Comentario.objects.filter(id = id_comentario)
     comentario.delete()
     return redirect ('homepage')
+
+
+def solicitud_unir(request, id_user, id_barrio):
+    solicitante = CustomUser.objects.get(user_id = id_user)
+    solicitante.is_accept = 1
+    barrio = Barrio.objects.get(id = id_barrio)
+    solicitante.barrio = barrio
+    solicitante.save()
+    return redirect('homepage')
+
+def aceptar_solicitud(request, id_solicitud):
+    solicitante = CustomUser.objects.get(user_id = id_solicitud)
+    solicitante.is_accept = 2
+    solicitante.save()
+    return redirect('homepage')
+
+
+def rechazar_solicitud(request, id_solicitud):
+    solicitante = CustomUser.objects.get(user_id = id_solicitud)
+    solicitante.is_accept = 3
+    solicitante.save()
+    return redirect('homepage')
