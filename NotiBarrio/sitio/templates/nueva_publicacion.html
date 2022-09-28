@@ -9,7 +9,7 @@
         {% csrf_token %}
         {{form.as_p}}
         <p><button class="btn btn-primary" type="submit">PUBLICAR</button></p>
-        <p><a href="{% url 'mibarrio' user.id %}">Cancelar </a></p>
+        <p><a href="{% url 'mibarrio' %}">Cancelar </a></p>
     </form>
 </div>
 {% endblock %}

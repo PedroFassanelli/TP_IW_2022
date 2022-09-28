@@ -44,8 +44,8 @@ def filtropublicacion(request, filtro):
 
 
 @login_required(login_url='login')
-def mibarrio(request, id_user):
-    custom = CustomUser.objects.filter(user_id = id_user)
+def mibarrio(request):
+    custom = CustomUser.objects.filter(user_id = request.user.id)
     mi_barrio = []
     barrios = []
     aceptado = 0
@@ -76,12 +76,12 @@ def mibarrio(request, id_user):
         return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio, 'aceptado': aceptado, 'nombre_barrio': nombre_barrio, 'lista_solicitudes': lista_solicitudes, 'solicitudes_vacio': solicitudes_vacio})
 
 @login_required(login_url='login')
-def nuevaPublicacion(request, id_user):
+def nuevaPublicacion(request):
     if request.method == "POST":
         form = FormNuevaPublicacion(request.POST, request.FILES)
         if form.is_valid():
-            usuario = User.objects.filter(id = id_user)
-            custom = CustomUser.objects.filter(user_id = id_user)
+            usuario = User.objects.filter(id = request.user.id)
+            custom = CustomUser.objects.filter(user_id = request.user.id)
             new_publicacion = form.save(commit=False)
             Publicacion.objects.create(
                 publicationdate = datetime.today(),
@@ -134,6 +134,25 @@ def detallePublicacion(request, id_publicacion):
     comentarios = Comentario.objects.filter(id_publicacion = id_publicacion).order_by('comentdate')
     return render(request, 'detallepublicacion.html', {"lista_publicacion": publicacion, "lista_comentario": comentarios})
 
+
+@login_required(login_url='login')
+def nuevoComentario(request, id_publicacion):
+    if request.method == "POST":
+        form = FormNuevoComentario(request.POST)
+        if form.is_valid():
+            usuario = User.objects.filter(id = request.user.id)
+            new_comentario = form.save(commit=False)
+            Comentario.objects.create(
+                id_publicacion = id_publicacion,
+                comentdate = datetime.today(),
+                text = new_comentario.text,
+                user = usuario[0].email,
+                )
+            return redirect('homepage')
+    else:
+        form = FormNuevoComentario()
+    return render(request, 'comentar.html', {"form": form})
+
 @login_required(login_url='login')
 def eliminarComentario(request, id_comentario):
     comentario = Comentario.objects.filter(id = id_comentario)
@@ -141,8 +160,8 @@ def eliminarComentario(request, id_comentario):
     return redirect ('homepage')
 
 
-def solicitud_unir(request, id_user, id_barrio):
-    solicitante = CustomUser.objects.get(user_id = id_user)
+def solicitud_unir(request, id_barrio):
+    solicitante = CustomUser.objects.get(user_id = request.user.id)
     solicitante.is_accept = 1
     barrio = Barrio.objects.get(id = id_barrio)
     solicitante.barrio = barrio

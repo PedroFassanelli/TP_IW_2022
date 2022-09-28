@@ -5,7 +5,7 @@
 {% block contents %}
 <div class="lista-publicacion" ALIGN="center">
     {% if user.is_authenticated %}
-        <p><a href="{% url 'homepage' %}">Ir a Homepage</a> - <a href="{% url 'mibarrio' user.id %}">Ir a Mi Barrio</a> - <a href="{% url 'notipublicas' %}">Ir a NOTI-PUBLICAS</a></p>
+        <p><a href="{% url 'homepage' %}">Ir a Homepage</a> - <a href="{% url 'mibarrio' %}">Ir a Mi Barrio</a> - <a href="{% url 'notipublicas' %}">Ir a NOTI-PUBLICAS</a></p>
     {% else %}
         <p><a href="{% url 'homepage' %}">Ir a Homepage</a> - <a href="{% url 'notipublicas' %}">Ir a NOTI-PUBLICAS</a></p>
     {% endif %}
@@ -18,9 +18,9 @@
             <img src="{{ publicacion.image_two }}" alt="">
             <img src="{{ publicacion.image_three }}" alt="">
             {% if publicacion.user == user.email %}
-                <p><button class="btn" type="submit">Likes {{ publicacion.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicacion.dislikes }}</button> - <a class="btn" href="{% url 'detallepublicacion' publicacion.id %}">Comentar</a> - <a class="btn" href="{% url 'edit_publicacion' publicacion.id %}">Editar</a> - <a class="btn" href="{% url 'eliminar' publicacion.id %}">Eliminar</a></p>
+                <p><button class="btn" type="submit">Likes {{ publicacion.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicacion.dislikes }}</button> - <a class="btn" href="{% url 'nuevocomentario' publicacion.id  %}">Comentar</a> - <a class="btn" href="{% url 'edit_publicacion' publicacion.id %}">Editar</a> - <a class="btn" href="{% url 'eliminar' publicacion.id %}">Eliminar</a></p>
             {% else %}
-                <p><button class="btn" type="submit">Likes {{ publicacion.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicacion.dislikes }}</button> - <a class="btn" href="{% url 'detallepublicacion' publicacion.id %}">Comentar</a></p>
+                <p><button class="btn" type="submit">Likes {{ publicacion.likes }}</button> - <button class="btn" type="submit">Dislikes {{ publicacion.dislikes }}</button> - <a class="btn" href="{% url 'nuevocomentario' publicacion.id  %}">Comentar</a></p>
             {% endif %}
         </div>
         {% for comentario in lista_comentario %}

@@ -97,6 +97,19 @@
     box-shadow: 7px 13px 37px #000;
 }
 
+.form-comentar
+{
+    width: 50%;
+    background: rgba(10, 10, 10, 0.823);
+    padding: 30px;
+    margin: auto;
+    margin-top: 25px;
+    border-radius: 5px;
+    font-family: 'Times New Roman';
+    color: white;
+    box-shadow: 7px 13px 37px #000;
+}
+
 .form-register, .form-login
 {
     width: 500px;
