@@ -26,4 +26,4 @@ class FormNuevoComentario(forms.ModelForm):
         super(FormNuevoComentario, self).__init__(*args, **kwargs)
 
         self.fields['text'].widget.attrs['class'] = 'form-control'
-        self.fields['text'].widget.attrs['placeholder'] = "Texto"
+        self.fields['text'].widget.attrs['placeholder'] = "Escribe tu comentario..."

@@ -49,6 +49,7 @@
     
     <!-- Te muestra la lista de solicitudes -->
     {% if aceptado == 2 %}
+    {% if is_moderator == True %}
     <div class="lista-solicitud" ALIGN="center">
         <h1>Solicitudes</h1>
         <div class="solicitud">
@@ -63,6 +64,7 @@
             {% endif %}
         </div>
     </div>
+    {% endif %}
     {% endif %}
 </div>
 

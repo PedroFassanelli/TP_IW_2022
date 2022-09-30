@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.views.generic import View
 from sitio.models import Barrio, Publicacion, Comentario, CustomUser
 from sitio.forms import FormNuevaPublicacion, FormNuevoComentario
 
@@ -53,6 +54,10 @@ def mibarrio(request):
     nombre_barrio = ""
     lista_solicitudes = []
     solicitudes_vacio = False
+    #Controlar si el usuario es moderador
+    is_moderator = False
+    if request.user.groups.filter(name__in=['Moderador']):
+        is_moderator = True
     if (custom[0].is_accept == 0):
         barrios = Barrio.objects.all().order_by("number")
         return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio, 'aceptado': aceptado, 'nombre_barrio': nombre_barrio, 'lista_solicitudes': lista_solicitudes, 'solicitudes_vacio': solicitudes_vacio})
@@ -68,7 +73,7 @@ def mibarrio(request):
             vacio = True 
         if len(lista_solicitudes) == 0:
             solicitudes_vacio = True  
-        return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio, 'aceptado': aceptado, 'nombre_barrio': nombre_barrio, 'lista_solicitudes': lista_solicitudes, 'solicitudes_vacio': solicitudes_vacio})
+        return render(request, 'mibarrio.html', {'lista_barrios': barrios, 'lista_mibarrio': mi_barrio, 'vacia': vacio, 'aceptado': aceptado, 'nombre_barrio': nombre_barrio, 'lista_solicitudes': lista_solicitudes, 'solicitudes_vacio': solicitudes_vacio, 'is_moderator': is_moderator})
     else:
         aceptado = 3
         nombre_barrio = custom[0].barrio.namebarrio
@@ -129,29 +134,42 @@ def eliminarPublicacion(request, id_publicacion):
     return redirect ('homepage')
 
 
-def detallePublicacion(request, id_publicacion):
-    publicacion = Publicacion.objects.filter(id = id_publicacion)
-    comentarios = Comentario.objects.filter(id_publicacion = id_publicacion).order_by('comentdate')
-    return render(request, 'detallepublicacion.html', {"lista_publicacion": publicacion, "lista_comentario": comentarios})
-
-
-@login_required(login_url='login')
-def nuevoComentario(request, id_publicacion):
-    if request.method == "POST":
-        form = FormNuevoComentario(request.POST)
-        if form.is_valid():
-            usuario = User.objects.filter(id = request.user.id)
-            new_comentario = form.save(commit=False)
-            Comentario.objects.create(
-                id_publicacion = id_publicacion,
-                comentdate = datetime.today(),
-                text = new_comentario.text,
-                user = usuario[0].email,
-                )
-            return redirect('homepage')
-    else:
+class detallePublicacion(View):
+    def get(self, request, id_publicacion, *args, **kwargs):
+        publicacion = Publicacion.objects.filter(id = id_publicacion)
         form = FormNuevoComentario()
-    return render(request, 'comentar.html', {"form": form})
+
+        comentarios = Comentario.objects.filter(id_publicacion = id_publicacion).order_by('comentdate')
+
+        context = {
+            'lista_publicacion': publicacion,
+            'lista_comentario': comentarios,
+            'form': form,
+        }
+
+        return render(request, 'detallepublicacion.html', context)
+    
+    def post(self, request, id_publicacion, *args, **kwargs):
+        publicacion = Publicacion.objects.filter(id = id_publicacion)
+        form = FormNuevoComentario(request.POST)
+
+        if form.is_valid():
+            nuevo_comentario = form.save(commit=False)
+            nuevo_comentario.user = request.user.email
+            nuevo_comentario.id_publicacion = id_publicacion
+            nuevo_comentario.comentdate = datetime.today()
+            nuevo_comentario.save()
+        
+        comentarios = Comentario.objects.filter(id_publicacion = id_publicacion).order_by('comentdate')
+
+        context = {
+            'lista_publicacion': publicacion,
+            'lista_comentario': comentarios,
+            'form': form,
+        }
+
+        return render(request, 'detallepublicacion.html',context)
+
 
 @login_required(login_url='login')
 def eliminarComentario(request, id_comentario):

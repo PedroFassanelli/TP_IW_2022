@@ -5,7 +5,7 @@
 {% block contents %}
 <!--Register-->
 <div class="form-register" ALIGN="center">
-    <h1>Register</h1>
+    <h1>Registrarse</h1>
     <form method="POST">
         {% csrf_token %}
         {% for field in form %}
@@ -18,7 +18,7 @@
                 {% endfor %}
             </div>
         {% endfor %}
-        <button class="btn btn-primary" type="submit">Register</button>
+        <button class="btn btn-primary" type="submit">Registrarse</button>
         <p><a href="{% url 'login' %}">Iniciar Sesión</a></p>
         <p><a href="{% url 'homepage' %}">Cancelar</a></p>
     </form>
