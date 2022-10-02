@@ -11,9 +11,12 @@
             <a href="{% url 'filtropublicacion' 'reciente' %}"><button class="btn btn-primary" type="submit">Más Recientes</button></a>
             <a href="{% url 'filtropublicacion' 'antiguo' %}"><button class="btn btn-primary" type="submit">Más Antiguos</button></a>
             <a href="{% url 'filtropublicacion' 'like' %}"><button class="btn btn-primary" type="submit">Likes</button></a>
-            {% for barrio in lista_barrios %}
-                <a href="{% url 'filtropublicacion' barrio.namebarrio %}"><button class="btn btn-primary" type="submit">{{ barrio.namebarrio }}</button></a>
-            {% endfor %}
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">FILTRO BARRIO</button>
+                <ul class="dropdown-menu" style="background-color:#0d6efd">
+                    {% for barrio in lista_barrios %}
+                    <li><a class="dropdown-item" href="{% url 'filtropublicacion' barrio.namebarrio %}"><button class="btn btn-primary" type="submit" style="background-color:#0d6efd">{{ barrio.namebarrio }}</button></a></li>
+                    {% endfor %}
+               </ul>
         </div>
         {% if vacia == False %} <!-- Muestra todas las noticias publicas -->
             {% for publicaciones in lista_publicaciones %}
