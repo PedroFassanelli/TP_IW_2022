@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -13,4 +13,5 @@ urlpatterns = [
     path('solicitarunirse/<int:id_barrio>/', views.solicitud_unir, name='solicitarunirse'),
     path('aceptarsolicitud/<int:id_solicitud>/', views.aceptar_solicitud, name='aceptarsolicitud'),
     path('rechazarsolicitud/<int:id_solicitud>/', views.rechazar_solicitud, name='rechazarsolicitud'),
+    path('search/', include('haystack.urls')),
 ]

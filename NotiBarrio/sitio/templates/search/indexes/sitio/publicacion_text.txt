@@ -1,0 +1,4 @@
+{{ object.text }}
+{{ object.title }}
+{{ object.publicationdate }}
+{{ object.user }}
