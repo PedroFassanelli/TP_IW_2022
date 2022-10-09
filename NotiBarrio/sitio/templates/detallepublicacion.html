@@ -25,9 +25,13 @@
         </div>
         {% if user.is_authenticated %}
         <div class="comentario">
-            <form method="POST">
+            <form action="" method="POST">
                 {% csrf_token %}
-                {{form.as_p}}
+                <!--{{form.as_p}}-->
+                <p>
+                    <label for="text">Nuevo comentario:</label>
+                    {{form.text}}
+                </p>
                 <p><button class="btn btn-primary" type="submit">Publicar</button></p>
             </form>
         </div>

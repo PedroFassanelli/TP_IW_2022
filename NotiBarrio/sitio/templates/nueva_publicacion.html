@@ -7,7 +7,27 @@
     <h2>Nueva Publicación</h2>
     <form method="POST">
         {% csrf_token %}
-        {{form.as_p}}
+        <!--{{form.as_p}}-->
+        <p>
+            <label for="title">Título:</label>
+            {{form.title}}
+            <label for="text">Texto:</label>
+            {{form.text}}
+            <label for="is_public">Quiere que la publicación sea pública?</label>
+            {{form.is_public}}
+            <p>
+                <label for="image_one">Imagen 1:</label>
+                {{form.image_one}}
+            </p>
+            <p>
+                <label for="image_one">Imagen 2:</label>
+                {{form.image_two}}
+            </p>
+            <p>
+                <label for="image_one">Imagen 3:</label>
+                {{form.image_three}}
+            </p>
+        </p>
         <p><button class="btn btn-primary" type="submit">PUBLICAR</button></p>
         <p><a href="{% url 'mibarrio' %}">Cancelar </a></p>
     </form>
