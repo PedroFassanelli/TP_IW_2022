@@ -1,6 +1,5 @@
-from pyexpat import model
 from haystack import indexes
-from sitio.models import Publicacion, Barrio
+from sitio.models import Publicacion
 
 class PublicacionIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
