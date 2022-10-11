@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from sitio.views import homepage
+from django.views.generic.base import TemplateView
 
 
 urlpatterns = [
@@ -28,4 +29,10 @@ urlpatterns = [
 
     # usuarios
     path('users/', include('users.urls')),
+
+    #robots
+    path(
+        "robots.txt",
+        TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
+    ),
 ]
