@@ -19,7 +19,7 @@
 
             {% for result in page.object_list %}
             <div class="publicacion">
-                <h3>{{ result.title }}</h3>
+                <h3><a href="/sitio/detallepublicacion/{{result.pk}}">{{ result.title }}</a></h3>
                 <p>{{ result.texto }}</p>
                 <p>{{ result.location }} - {{ result.user }} - {{ result.publicationdate}}</p>
                 <img src="{{ result.image_one }}" alt="">

@@ -21,15 +21,19 @@
                     <span class="navbar-toggler-icon"></span>
                   </button>
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!--
                     <form class="d-flex">
                       <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                       <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
+                    -->
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/sitio/search/">BUSCAR NOTICIAS</a>
+                      </li>
                       <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{% url 'notipublicas' %}">NOTI-PUBLICAS</a>
                       </li>
-                      
                       {% if user.is_authenticated %}
                         <li class="nav-item">
                           <a class="nav-link active" aria-current="page" href="{% url 'mibarrio' %}">MI BARRIO</a>
