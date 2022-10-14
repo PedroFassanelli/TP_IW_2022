@@ -100,8 +100,7 @@ def nuevaPublicacion(request):
                 user = usuario[0].email,
                 location = custom[0].barrio,
                 )
-            #return redirect('mibarrio')
-            return redirect('homepage')
+            return redirect('mibarrio')
     else:
         form = FormNuevaPublicacion()
     return render(request, 'nueva_publicacion.html', {"form": form})
@@ -120,7 +119,7 @@ def editarPublicacion(request, id_publicacion):
         form = FormNuevaPublicacion(request.POST, instance=publicacion)
         if form.is_valid():
             form.save()
-            return redirect('homepage')
+            return redirect('detallepublicacion', id_publicacion)
     else:
         form = FormNuevaPublicacion(instance=publicacion)
     context['form'] = form
@@ -159,6 +158,7 @@ class detallePublicacion(View):
             nuevo_comentario.id_publicacion = id_publicacion
             nuevo_comentario.comentdate = datetime.today()
             nuevo_comentario.save()
+            form = FormNuevoComentario()
         
         comentarios = Comentario.objects.filter(id_publicacion = id_publicacion).order_by('comentdate')
 
@@ -184,17 +184,17 @@ def solicitud_unir(request, id_barrio):
     barrio = Barrio.objects.get(id = id_barrio)
     solicitante.barrio = barrio
     solicitante.save()
-    return redirect('homepage')
+    return redirect('mibarrio')
 
 def aceptar_solicitud(request, id_solicitud):
     solicitante = CustomUser.objects.get(user_id = id_solicitud)
     solicitante.is_accept = 2
     solicitante.save()
-    return redirect('homepage')
+    return redirect('mibarrio')
 
 
 def rechazar_solicitud(request, id_solicitud):
     solicitante = CustomUser.objects.get(user_id = id_solicitud)
     solicitante.is_accept = 3
     solicitante.save()
-    return redirect('homepage')
+    return redirect('misitio')
